@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>?</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script src="validator.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <h1 class="header-text">App Library</h1>
+        </div>
+        <nav class="taskbar navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <span class="navbar-brand">Taskbar</span>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Create <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="modal" data-target="#addApp">App</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="main">
+            <div id="loading">
+                <style type='text/css'>
+                    uiload {
+                        display: inline-block;
+                        position: relative;
+                    }
+
+                    uiload > div {
+                        position: relative;
+                    }
+
+                    @-webkit-keyframes uil-reload-css {
+                        0% {
+                            -ms-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -webkit-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+                        50% {
+                            -ms-transform: rotate(180deg);
+                            -moz-transform: rotate(180deg);
+                            -webkit-transform: rotate(180deg);
+                            -o-transform: rotate(180deg);
+                            transform: rotate(180deg);
+                        }
+                        100% {
+                            -ms-transform: rotate(360deg);
+                            -moz-transform: rotate(360deg);
+                            -webkit-transform: rotate(360deg);
+                            -o-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    @-moz-keyframes uil-reload-css {
+                        0% {
+                            -ms-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -webkit-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+                        50% {
+                            -ms-transform: rotate(180deg);
+                            -moz-transform: rotate(180deg);
+                            -webkit-transform: rotate(180deg);
+                            -o-transform: rotate(180deg);
+                            transform: rotate(180deg);
+                        }
+                        100% {
+                            -ms-transform: rotate(360deg);
+                            -moz-transform: rotate(360deg);
+                            -webkit-transform: rotate(360deg);
+                            -o-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    @-ms-keyframes uil-reload-css {
+                        0% {
+                            -ms-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -webkit-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+                        50% {
+                            -ms-transform: rotate(180deg);
+                            -moz-transform: rotate(180deg);
+                            -webkit-transform: rotate(180deg);
+                            -o-transform: rotate(180deg);
+                            transform: rotate(180deg);
+                        }
+                        100% {
+                            -ms-transform: rotate(360deg);
+                            -moz-transform: rotate(360deg);
+                            -webkit-transform: rotate(360deg);
+                            -o-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    @keyframes uil-reload-css {
+                        0% {
+                            -ms-transform: rotate(0deg);
+                            -moz-transform: rotate(0deg);
+                            -webkit-transform: rotate(0deg);
+                            -o-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                        }
+                        50% {
+                            -ms-transform: rotate(180deg);
+                            -moz-transform: rotate(180deg);
+                            -webkit-transform: rotate(180deg);
+                            -o-transform: rotate(180deg);
+                            transform: rotate(180deg);
+                        }
+                        100% {
+                            -ms-transform: rotate(360deg);
+                            -moz-transform: rotate(360deg);
+                            -webkit-transform: rotate(360deg);
+                            -o-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    .uil-reload-css {
+                        position: relative;
+                        margin-left: auto;
+                        margin-right: auto;
+                        width: 200px;
+                        height: 200px;
+                        bottom: 1.2em;
+                    }
+
+                    .uil-reload-css > div {
+                        -ms-animation: uil-reload-css 0.5s linear infinite;
+                        -moz-animation: uil-reload-css 0.5s linear infinite;
+                        -webkit-animation: uil-reload-css 0.5s linear infinite;
+                        -o-animation: uil-reload-css 0.5s linear infinite;
+                        animation: uil-reload-css 0.5s linear infinite;
+                        display: block;
+                        position: absolute;
+                        top: 20px;
+                        left: 20px;
+                        width: 160px;
+                        height: 160px;
+                        border-radius: 100px;
+                        border: 20px solid #2fc296;
+                        border-top: 20px solid rgba(0, 0, 0, 0);
+                        border-right: 20px solid #2fc296;
+                        border-bottom: 20px solid #2fc296;
+                    }
+
+                    .uil-reload-css > div:after {
+                        content: " ";
+                        width: 0px;
+                        height: 0px;
+                        border-style: solid;
+                        border-width: 0 30px 30px 30px;
+                        border-color: transparent transparent #2fc296 transparent;
+                        display: block;
+                        -ms-transform: translate(-15px, 0) rotate(45deg);
+                        -moz-transform: translate(-15px, 0) rotate(45deg);
+                        -webkit-transform: translate(-15px, 0) rotate(45deg);
+                        -o-transform: translate(-15px, 0) rotate(45deg);
+                        transform: translate(-15px, 0) rotate(45deg);
+                    }
+                }
+                </style>
+                <div class='uil-reload-css' style='-webkit-transform:scale(0.25)'>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addApp" tabindex="-1" role="dialog" aria-labelledby="modalHeader">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title" id="modalHeader">Add App</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nameOfApp">Name of app</label>
+                            <input type="text" class="form-control" id="nameOfApp" placeholder="Name..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="imgUrlOfApp">Image URL of app</label>
+                            <input type="url" class="form-control" id="imgUrlOfApp" placeholder="Image URL..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="websiteOfApp">Name of app</label>
+                            <input type="url" class="form-control" id="websiteOfApp" placeholder="Website URL..." required>
+                        </div>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="addAppBTN">Add</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

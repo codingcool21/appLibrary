@@ -1,0 +1,93 @@
+body {
+    background-color: #dbe0fc;
+}
+
+.container {
+    padding: 7px;
+}
+
+.header {
+    margin: 0;
+    padding: 1.5px;
+    text-align: center;
+    border-radius: 9px;
+    background-color: rgba(144, 255, 149, 0.7);
+    border: 2px solid black;
+}
+
+.header-text {
+    font-family: Raleway, sans-serif;
+    font-size: 35px;
+    color: #865858;
+    padding-bottom: 8px;
+}
+
+.main {
+    margin-top: 15px;
+    width: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.app {
+    margin: 4px;
+    width: 16em;
+    height: auto;
+    border: 2px solid #a89c9c;
+    border-radius: 7px;
+    display: inline-block;
+    background-color: lightgreen;
+    padding: 5px;
+    -webkit-transition: background-color 0.5s;
+    transition: background-color: 0.5s;
+}
+
+.app:hover {
+    background-color: yellow;
+}
+
+.app-title {
+    display: block;
+    font-size: 20px;
+    font-family: Raleway, sans-serif;
+    text-align: center;
+    margin-top: 3.1px;
+    margin-bottom: 2.5px;
+    margin-left: auto;
+}
+
+.app-img {
+    position: relative;
+    left: auto;
+    right: auto;
+    margin-bottom: 10px;
+}
+
+.app-link {
+    text-align: center;
+    font-family: Raleway, sans-serif;
+}
+
+.taskbar {
+    margin-top: 0.7em;
+    background-color: #e5e5e5;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.modal-body > form {
+    overflow: hidden;
+}
+
+.modal-body > form > button {
+    position: relative;
+    float: right;
+    margin: auto;
+    margin: 5px;
+}
+
+.close {
+    display: inline-block;
+    position: relative;
+    margin-left: auto;
+}
