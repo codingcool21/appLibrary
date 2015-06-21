@@ -92,6 +92,57 @@
     }
 })(jQuery);
 
+function App_AddAppFromModal(num) {
+    console.log("entered modal func");
+    if (num == 1) {
+        $('#nameOfApp').val("");
+        $('#imgUrlOfApp').val("");
+        $('#websiteOfApp').val("");
+        $('#addApp').modal('hide');
+        //alert("canceled");
+        return;
+    } else {
+        var name = $('#nameOfApp').val();
+        var img = $('#imgUrlOfApp').val();
+        var website = $('#websiteOfApp').val();
+        $('#nameOfApp').val("");
+        $('#imgUrlOfApp').val("");
+        $('#websiteOfApp').val("");
+        $('#addApp').modal('hide');
+        if (website.indexOf("http") == -1) {
+            website = "http://" + website;
+        } else {}
+        if (img.indexOf("http") == -1) {
+            img = "http://" + img;
+        } else {}
+        App_Bitly(img, function (img_NEW) {
+            //img = img_NEW;
+            App_Bitly(website, function (website_NEW) {
+                //website = website_NEW;
+                App_AddApp(name, img_NEW, website_NEW);
+            });
+        });
+        //alert("received");
+    }
+}
+
+function App_Bitly(longUrl, callback) {
+    var b = $.ajax({
+        type: "GET",
+        url: "https://api-ssl.bitly.com/v3/shorten?",
+        data: {
+            "access_token": "9a2861b820eb39eda2c7ad0955d92c3261710894",
+            "longUrl": longUrl,
+            "format": "txt"
+        },
+        success: function (a) {
+            callback(a);
+        }
+    });
+    //console.log(b);
+    //return b.responseText;
+}
+
 function App_DeleteApp(i) {
     var identifier = $(i).parent().parent(".app").attr("data-identifier");
     //alert(i.parent().parent(".app").attr("data-identifier"));
@@ -99,35 +150,13 @@ function App_DeleteApp(i) {
 }
 
 function App_AddApp(name, imglink, urllink) {
-    alert(imglink);
-    if (urllink.indexOf("http") == -1) {
-        urllink = "http://" + urllink;
-    } else {
-        return;
-    }
-    if (imglink.indexOf("http") == -1) {
-        imglink = "http://" + imglink;
-    } else {
-        return;
-    }
-    $.post("https://www.googleapis.com/urlshortener/v1/url", {
-        "key": "AIzaSyB4rbn1o8vo6BYo1ZxyxAXv4-JxCTnjttU",
-        "longUrl": imglink
-    }, function (d) {
-        imglink = d.id;
-        $.post("https://www.googleapis.com/urlshortener/v1/url", {
-            "key": "AIzaSyB4rbn1o8vo6BYo1ZxyxAXv4-JxCTnjttU",
-            "longUrl": urllink
-        }, function (e) {
-            urllink = e.id;
-            var o = {};
-            o.name = name;
-            o.img = imglink;
-            o.website = urllink;
-            firebaseRef.child("apps/").push(o);
-        }, "application/json")
-    }, "application/json")
-
+    //alert(imglink);
+    var o = {};
+    o.name = name;
+    o.img = imglink;
+    o.website = urllink;
+    //alert("imglink");
+    firebaseRef.child("apps/").push(o);
 }
 
 function App_AddAppFromFirebase(name, imglink, urllink, appidentifier) {
@@ -159,45 +188,44 @@ function App_Generate15RandChar() {
 }
 
 function App_Main() {
-        firebaseRef = new Firebase("https://21-app-library.firebaseio.com/");
-        firebaseRef.child("apps/").on("value", function (a) {
-            $(".app").remove();
-            $("#loading").hide();
-            var newApps = a.val();
-            //appListFromFirebase = newApps;
-            for (var app in newApps) {
-                App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
-            }
-            //App_AddApp(newApp.name, newApp.img, newApp.website);
-            //firebaseRef.off("");
+    firebaseRef = new Firebase("https://21-app-library.firebaseio.com/");
+    firebaseRef.child("apps/").on("value", function (a) {
+        $(".app").remove();
+        $("#loading").hide();
+        var newApps = a.val();
+        //appListFromFirebase = newApps;
+        for (var app in newApps) {
+            App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
+        }
+        //App_AddApp(newApp.name, newApp.img, newApp.website);
+        //firebaseRef.off("");
+    });
+    /*firebaseRef.child("apps/").on("child_changed", function () {
+        $(".app").remove();
+        firebaseRef.child("apps/").on("child_added", function (a) {
+            var newApp = a.val();
+            App_AddApp(newApp.name, newApp.img, newApp.website);
+            firebaseRef.off("child_added");
         });
-        /*firebaseRef.child("apps/").on("child_changed", function () {
-            $(".app").remove();
-            firebaseRef.child("apps/").on("child_added", function (a) {
-                var newApp = a.val();
-                App_AddApp(newApp.name, newApp.img, newApp.website);
-                firebaseRef.off("child_added");
-            });
-        });*/
-        //App_AppAnimations();
+    });*/
+    //App_AppAnimations();
 
-        $("#addApp").keydown(function (e) {
-            if (e.which == 13) {
-                App_AddApp($('#nameOfApp').val(), $('#imgUrlOfApp').val(), $('#websiteOfApp').val());
-                $('#nameOfApp').val("");
-                $('#imgUrlOfApp').val("");
-                $('#websiteOfApp').val("");
-                $('#addApp').modal('hide');
-            }
-        });
-        $("#addAppBTN").click(function () {
-            App_AddApp($('#nameOfApp').val(), $('#imgUrlOfApp').val(), $('#websiteOfApp').val());
+    $("#addApp").keydown(function (e) {
+        if (e.which == 13) {
+            $("#addAppBTN").trigger("click");
+        }
+        if (e.which == 27) {
             $('#nameOfApp').val("");
             $('#imgUrlOfApp').val("");
             $('#websiteOfApp').val("");
             $('#addApp').modal('hide');
-        });
+        }
+    });
+    $("#addAppBTN").click(function () {
+        //App_AddApp($('#nameOfApp').val(), $('#imgUrlOfApp').val(), $('#websiteOfApp').val());
+        console.log("click func");
+        //App_AddAppFromModal(1);
+    });
 
-    }
-    //var appListFromFirebase = {};
+}
 $(App_Main);

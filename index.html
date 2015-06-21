@@ -203,22 +203,25 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nameOfApp">Name of app</label>
-                            <input type="text" class="form-control" id="nameOfApp" placeholder="Name..." required>
+                            <input type="text" class="form-control" id="nameOfApp" placeholder="Name...">
                         </div>
                         <div class="form-group">
                             <label for="imgUrlOfApp">Image URL of app</label>
-                            <input type="url" class="form-control" id="imgUrlOfApp" placeholder="Image URL..." required>
+                            <input type="text" class="form-control" id="imgUrlOfApp" placeholder="Image URL...">
                         </div>
                         <div class="form-group">
-                            <label for="websiteOfApp">Name of app</label>
-                            <input type="url" class="form-control" id="websiteOfApp" placeholder="Website URL..." required>
+                            <label for="websiteOfApp">URL of app</label>
+                            <input type="text" class="form-control" id="websiteOfApp" placeholder="Website URL...">
                         </div>
-                        <button type="button" class="btn btn-success" data-dismiss="modal" id="addAppBTN">Add</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="addAppBTN" onclick="App_AddAppFromModal(0)">Add</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="App_AddAppFromModal(1)">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
