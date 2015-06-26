@@ -149,7 +149,7 @@ function App_Bitly(longUrl, callback) {
 function App_DeleteApp(i) {
     var identifier = $(i).parent().parent(".app").attr("data-identifier");
     //alert(i.parent().parent(".app").attr("data-identifier"));
-    firebaseRef.child("apps/" + identifier + "/").set(null);
+    firebaseRef.child("users/" + userName + "/" + identifier + "/").set(null);
 }
 
 function App_AddApp(name, imglink, urllink) {
@@ -159,7 +159,7 @@ function App_AddApp(name, imglink, urllink) {
     o.img = imglink;
     o.website = urllink;
     //alert("imglink");
-    firebaseRef.child("users/" + userName).push(o);
+    firebaseRef.child("users/" + userName + "/").push(o);
 }
 
 function App_AddAppFromFirebase(name, imglink, urllink, appidentifier) {
@@ -203,6 +203,7 @@ function App_Main() {
         for (var app in newApps) {
             App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
         }
+        $(".main").append($("<div class='app'>").html("<div class='add'><button data-toggle='modal' data-target='#addApp' class='glyphicon glyphicon-plus'></button></div>"));
         //App_AddApp(newApp.name, newApp.img, newApp.website);
         //firebaseRef.off("");
     });

@@ -1,11 +1,9 @@
 body {
     background-color: #dbe0fc;
 }
-
 .container {
     padding: 7px;
 }
-
 .header {
     margin: 0;
     padding: 1.5px;
@@ -14,22 +12,34 @@ body {
     background-color: rgba(144, 255, 149, 0.7);
     border: 2px solid black;
 }
-
 .header-text {
     font-family: Raleway, sans-serif;
     font-size: 35px;
     color: #865858;
     padding-bottom: 8px;
 }
-
 .main {
     margin-top: 15px;
     width: auto;
     margin-left: 10px;
     margin-right: 10px;
 }
-
+.app .add button{
+    height: 278px;
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: black;
+    position: relative;
+    top: 50%;
+    overflow: none;
+    /*margin: auto;*/
+    /*margin: 5%;*/
+}
 .app {
+    vertical-align: top;
+    overflow: none;
     margin: 4px;
     width: 16em;
     height: auto;
@@ -40,12 +50,11 @@ body {
     padding: 5px;
     -webkit-transition: background-color 0.5s;
     transition: background-color: 0.5s;
+    text-align: center;
 }
-
 .app:hover {
     background-color: yellow;
 }
-
 .app-title {
     display: block;
     font-size: 20px;
@@ -55,37 +64,33 @@ body {
     margin-bottom: 2.5px;
     margin-left: auto;
 }
-
 .app-img {
     position: relative;
     left: auto;
     right: auto;
     margin-bottom: 10px;
 }
-
 .app-link {
     text-align: center;
     font-family: Raleway, sans-serif;
 }
-
 .taskbar {
     margin-top: 0.7em;
-    background-color: #e5e5e5;
+    /*background-color: #e5e5e5;
     border: 2px solid black;
-    border-radius: 5px;
+    border-radius: 5px;*/
+    width: 100%;
+    
 }
-
 .modal-body > form {
     overflow: hidden;
 }
-
 .modal-body > form > button {
     position: relative;
     float: right;
     margin: auto;
     margin: 5px;
 }
-
 .close {
     display: inline-block;
     position: relative;
