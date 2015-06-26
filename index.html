@@ -2,12 +2,19 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>App Library</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <script src="validator.js"></script>
-    <script src="vex/js/vex.min.js"></script>
+    <script src="vex/js/vex.combined.min.js"></script>
+    <script>
+        vex.defaultOptions.className = 'vex-theme-os';
+    </script>
+    <link rel="stylesheet" href="vex/css/vex.css" />
+    <link rel="stylesheet" href="vex/css/vex-theme-os.css" />
+    <script src="pace.min.js"></script>
     <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
     <script src="app.js"></script>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -36,6 +43,34 @@
                 </ul>
             </div>
         </nav>-->
+        <div class="taskbar">
+            <button id="logInBtn" onclick="App_LogInModal()" class="btn btn-primary" style="position: relative; margin-right: 10px; display: none;">
+                Log in
+            </button>
+            <button id="signUpBtn" class="btn btn-primary" style="position: relative; margin-right: 10px; display: none;">
+                Sign up
+            </button>
+            <div class="btn-group" id="loggedInBtnDiv" style="display: none;">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="userNameField"></span>
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#">Change password</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" onclick="App_LogOut()">Log out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="header" id="examples" style="display: inline-block; text-align:left; margin-left: 15px; padding-left: 15px; padding-right: 15px; padding-bottom: 10px;">
+            <h3 style="margin-bottom: 10px;">Examples: </h3>
+        </div>
+        <script>
+            $("#examples").hide();
+        </script>
         <div class="main">
             <div id="loading">
                 <style type='text/css'>
@@ -43,11 +78,9 @@
                         display: inline-block;
                         position: relative;
                     }
-
                     uiload > div {
                         position: relative;
                     }
-
                     @-webkit-keyframes uil-reload-css {
                         0% {
                             -ms-transform: rotate(0deg);
@@ -71,7 +104,6 @@
                             transform: rotate(360deg);
                         }
                     }
-
                     @-moz-keyframes uil-reload-css {
                         0% {
                             -ms-transform: rotate(0deg);
@@ -95,7 +127,6 @@
                             transform: rotate(360deg);
                         }
                     }
-
                     @-ms-keyframes uil-reload-css {
                         0% {
                             -ms-transform: rotate(0deg);
@@ -119,7 +150,6 @@
                             transform: rotate(360deg);
                         }
                     }
-
                     @keyframes uil-reload-css {
                         0% {
                             -ms-transform: rotate(0deg);
@@ -143,7 +173,6 @@
                             transform: rotate(360deg);
                         }
                     }
-
                     .uil-reload-css {
                         position: relative;
                         margin-left: auto;
@@ -152,7 +181,6 @@
                         height: 200px;
                         bottom: 1.2em;
                     }
-
                     .uil-reload-css > div {
                         -ms-animation: uil-reload-css 0.5s linear infinite;
                         -moz-animation: uil-reload-css 0.5s linear infinite;
@@ -171,9 +199,8 @@
                         border-right: 20px solid #2fc296;
                         border-bottom: 20px solid #2fc296;
                     }
-
                     .uil-reload-css > div:after {
-                        content: " ";
+                        content:" ";
                         width: 0px;
                         height: 0px;
                         border-style: solid;
@@ -192,7 +219,7 @@
                     <div></div>
                 </div>
             </div>
-            
+
         </div>
         <div class="modal fade" id="addApp" tabindex="-1" role="dialog" aria-labelledby="modalHeader">
             <div class="modal-dialog" role="document">

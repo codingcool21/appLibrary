@@ -1,8 +1,20 @@
-var userName = "default";
-(function (d) {
-    d.each(["backgroundColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "borderTopColor", "color", "outlineColor"], function (f, e) {
-        d.fx.step[e] = function (g) {
-            if (!g.colorInit) {
+firebaseRef = new Firebase("https://21-app-library.firebaseio.com/");
+var userName;
+if(window.localStorage.getItem("userName") == null) {
+    window.localStorage.removeItem("firebase:session::21-app-library");
+    window.localStorage.removeItem("firebase:host:21-app-library.firebaseio.com");
+    userName = "default";
+} else {
+    userName = window.localStorage.getItem("userName").toLowerCase();
+    var y = userName.split("");
+    y[0] = y[0].toUpperCase();
+    y = y.join("");
+    var displayName = y;
+}
+(function(d) {
+    d.each(["backgroundColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "borderTopColor", "color", "outlineColor"], function(f, e) {
+        d.fx.step[e] = function(g) {
+            if(!g.colorInit) {
                 g.start = c(g.elem, e);
                 g.end = b(g.end);
                 g.colorInit = true
@@ -13,22 +25,22 @@ var userName = "default";
 
     function b(f) {
         var e;
-        if (f && f.constructor == Array && f.length == 3) {
+        if(f && f.constructor == Array && f.length == 3) {
             return f
         }
-        if (e = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(f)) {
+        if(e = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(f)) {
             return [parseInt(e[1]), parseInt(e[2]), parseInt(e[3])]
         }
-        if (e = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(f)) {
+        if(e = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(f)) {
             return [parseFloat(e[1]) * 2.55, parseFloat(e[2]) * 2.55, parseFloat(e[3]) * 2.55]
         }
-        if (e = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(f)) {
+        if(e = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(f)) {
             return [parseInt(e[1], 16), parseInt(e[2], 16), parseInt(e[3], 16)]
         }
-        if (e = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(f)) {
+        if(e = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(f)) {
             return [parseInt(e[1] + e[1], 16), parseInt(e[2] + e[2], 16), parseInt(e[3] + e[3], 16)]
         }
-        if (e = /rgba\(0, 0, 0, 0\)/.exec(f)) {
+        if(e = /rgba\(0, 0, 0, 0\)/.exec(f)) {
             return a.transparent
         }
         return a[d.trim(f).toLowerCase()]
@@ -38,7 +50,7 @@ var userName = "default";
         var f;
         do {
             f = d.css(g, e);
-            if (f != "" && f != "transparent" || d.nodeName(g, "body")) {
+            if(f != "" && f != "transparent" || d.nodeName(g, "body")) {
                 break
             }
             e = "backgroundColor"
@@ -95,7 +107,7 @@ var userName = "default";
 
 function App_AddAppFromModal(num) {
     console.log("entered modal func");
-    if (num == 1) {
+    if(num == 1) {
         $('#nameOfApp').val("");
         $('#imgUrlOfApp').val("");
         $('#websiteOfApp').val("");
@@ -110,18 +122,25 @@ function App_AddAppFromModal(num) {
         $('#imgUrlOfApp').val("");
         $('#websiteOfApp').val("");
         $('#addApp').modal('hide');
-        if (website.indexOf("http") == -1) {
+        if(website.indexOf("http") == -1) {
             website = "http://" + website;
         } else {}
-        if (img.indexOf("http") == -1) {
+        if(img.indexOf("http") == -1) {
             img = "http://" + img;
         } else {}
-        App_Bitly(img, function (img_NEW) {
+        App_Bitly(img, function(img_NEW) {
+            var k = img_NEW.split("");
+            k[k.length - 1] = undefined;
+            img_NEW = k.join("");
+            App_AddApp(name, img_NEW, website);
             //img = img_NEW;
-            App_Bitly(website, function (website_NEW) {
-                //website = website_NEW;
-                App_AddApp(name, img_NEW, website_NEW);
-            });
+            //App_AddApp(name, img_NEW, website_NEW);
+            //App_Bitly(website, function(website_NEW) {
+            //website = website_NEW;
+            //v = website_NEW.split("");
+            //v[v.length - 1] = undefined;
+            // website_NEW = v.join("");
+            //});
         });
         //alert("received");
     }
@@ -136,7 +155,7 @@ function App_Bitly(longUrl, callback) {
             "longUrl": longUrl,
             "format": "txt"
         },
-        success: function (a) {
+        success: function(a) {
             var b = a.split("http://");
             a = "https://" + b[1];
             callback(a);
@@ -149,7 +168,7 @@ function App_Bitly(longUrl, callback) {
 function App_DeleteApp(i) {
     var identifier = $(i).parent().parent(".app").attr("data-identifier");
     //alert(i.parent().parent(".app").attr("data-identifier"));
-    firebaseRef.child("users/" + userName + "/" + identifier + "/").set(null);
+    firebaseRef.child("users/" + userName + "/apps/" + identifier + "/").set(null);
 }
 
 function App_AddApp(name, imglink, urllink) {
@@ -159,18 +178,19 @@ function App_AddApp(name, imglink, urllink) {
     o.img = imglink;
     o.website = urllink;
     //alert("imglink");
-    firebaseRef.child("users/" + userName + "/").push(o);
+    firebaseRef.child("users/" + userName + "/apps/").push(o);
+    //location.reload();
 }
 
 function App_AddAppFromFirebase(name, imglink, urllink, appidentifier) {
-        var app = $("<div class='app' data-identifier='" + appidentifier + "'>").html("<div class='app-delete'><img class='close' src='close.png' height='28' width='28' onclick='App_DeleteApp($(this))'></div><div class='app-title'></div><div class='app-img'></div><div class='app-link'></div>");
-        $(app).find(".app-title").text(name);
-        $(app).find(".app-img").html("<img>").find("img").attr("src", imglink).attr("width", "210em").attr("height", "200");
-        $(app).find(".app-link").html("<a>").find("a").addClass("btn btn-primary").attr("href", urllink).text("Open App");
-        $(app).appendTo(".main");
-        //App_AppAnimations();
-    }
-    /*function App_AppAnimations() {
+    var app = $("<div class='app' data-identifier='" + appidentifier + "'>").html("<div class='app-delete'><img class='close' src='close.png' height='28' width='28' onclick='App_DeleteApp($(this))'></div><div class='app-title'></div><div class='app-img'></div><div class='app-link'></div>");
+    $(app).find(".app-title").text(name);
+    $(app).find(".app-img").html("<img>").find("img").attr("src", imglink).attr("width", "210em").attr("height", "200");
+    $(app).find(".app-link").html("<a>").find("a").addClass("btn btn-primary").attr("href", urllink).text("Open App");
+    $(app).appendTo(".main");
+    //App_AppAnimations();
+}
+/*function App_AppAnimations() {
         $(".app").mouseover(function () {
             $(this).animate({
                 backgroundColor: "yellow"
@@ -181,29 +201,172 @@ function App_AddAppFromFirebase(name, imglink, urllink, appidentifier) {
             }, "fast");
         });
     }*/
+
 function App_Generate15RandChar() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 15; i++) {
+    for(var i = 0; i < 15; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
 }
 
-function App_Main() {
-    //if (document.location.origin !== "http://brenda-exotic-4500.codio.io" || document.location.origin !== "http://brenda-exotic-3000.codio.io") {
-      //  document.location = "https://brenda-exotic-4500.codio.io";
-    //}
-    firebaseRef = new Firebase("https://21-app-library.firebaseio.com/");
-    firebaseRef.child("users/" + userName).on("value", function (a) {
-        $(".app").remove();
-        $("#loading").hide();
+function App_LogIn(us, pa) {
+    us = us.toLowerCase();
+    $.post("logIn.php", {
+        "username": us,
+        "password": pa
+    }, function(data) {
+        if(data.indexOf("Error: ") == -1) {
+            var j = us.split("");
+            j[0] = j[0].toUpperCase();
+            j = j.join("");
+            /*vex.dialog.alert({
+                message: 'Welcome to App Library, ' + us + "!"
+            });*/
+            userName = us;
+            window.localStorage.setItem("userName", us);
+            firebaseRef.off("value");
+            firebaseRef.authWithCustomToken(data, function(error) {
+                if(error) {
+                    vex.dialog.alert({
+                        message: 'Error: ' + error
+                    });
+                    $("#loading").hide();
+                    $("#examples").show();
+                    $("#logInBtn").show();
+                    $("#signUpBtn").show();
+                    firebaseRef.child("users/" + "default" + "/apps/").on("value", function(b) {
+                        getData(b);
+                    });
+                } else {
+                    $("#examples").hide();
+                    var y = userName.split("");
+                    y[0] = y[0].toUpperCase();
+                    y = y.join("");
+                    var displayName = y;
+                    //firebaseRef.off("value");
+                    firebaseRef.child("users/" + userName + "/apps/").on("value", function(b) {
+                        getData(b);
+                    });
+                    $("#loading").hide();
+                }
+            });
+        } else {
+            var b = data.split("");
+            b[b.length - 1] = undefined;
+            data = b.join("");
+            vex.dialog.confirm({
+                message: data + ".\nDo you want to try logging in again?",
+                callback: function(value) {
+                    if(value) {
+                        App_LogInModal();
+                    } else {
+                        $("#loading").hide()
+                        $("#examples").show();
+                        $(".app").show();
+                        $("#logInBtn").show();
+                        $("#signUpBtn").show();
+                        return;
+                    }
+                }
+            });
+        }
+    });
+}
+
+function App_LogInModal() {
+    $(".app").hide();
+    $("#loading").show();
+    $("#examples").hide();
+    $("#logInBtn").hide();
+    $("#signUpBtn").hide();
+    vex.dialog.open({
+        message: 'Enter your username and password: ',
+        input: '<input name="username" type="text" placeholder="Username" required /> <input name="password" type="password" placeholder="Password" required />',
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, {
+                text: 'Login'
+            }), $.extend({}, vex.dialog.buttons.NO, {
+                text: 'Back'
+            })
+        ],
+        callback: function(data) {
+            if(data === false) {
+                $(".app").show();
+                $("#loading").hide();
+                $("#examples").show();
+                $("#logInBtn").show();
+                $("#signUpBtn").show();
+            } else {
+                App_LogIn(data.username, data.password);
+            }
+        }
+    });
+}
+var getData = function(a) {
+    var y = userName.split("");
+    y[0] = y[0].toUpperCase();
+    y = y.join("");
+    var displayName = y;
+    $(".app").remove();
+    $("#loading").hide();
+    $("#loggedInBtnDiv").hide();
+    if(userName == "default") {
+        $("#logInBtn").show();
+        $("#signUpBtn").show();
+        $("#examples").show();
         var newApps = a.val();
-        //appListFromFirebase = newApps;
-        for (var app in newApps) {
+        //newApps["key"] = undefined;
+        //console.log(newApps);
+        //tt = newApps;
+        //console.log(newApps);
+        for(var app in newApps) {
+            //console.log(app);
             App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
         }
-        $(".main").append($("<div class='app'>").html("<div class='add'><button data-toggle='modal' data-target='#addApp' class='glyphicon glyphicon-plus'></button></div>"));
+        $(".app-delete").remove();
+        //$(".main").append($("<div class='app'>").html("<div class='add'><button data-toggle='modal' data-target='#addApp' class='glyphicon glyphicon-plus'></button></div>"));
+    } else {
+        $("#logInBtn").hide();
+        $("#signUpBtn").hide();
+        $("#userNameField").text(displayName);
+        $("#loggedInBtnDiv").show();
+        newApps = a.val();
+        //appListFromFirebase = newApps;
+        //console.log(newApps);
+        for(var app in newApps) {
+            App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
+        }
+        $(".main").append($("<div id='addAppCard' class='app'>").html("<div class='add'><button data-toggle='modal' data-target='#addApp' class='glyphicon glyphicon-plus'></button></div>"));
+        $("#addAppCard").height($(".app").height());
+    }
+}
+var tt;
+
+function App_LogOut() {
+    firebaseRef.off("value");
+    firebaseRef.unauth();
+    userName = "default";
+    window.localStorage.removeItem("userName");
+    //location.reload();
+    firebaseRef.child("users/" + "default" + "/apps/").on("value", function(b) {
+        getData(b);
+    });
+    //location.reload();
+}
+var newApps;
+
+function App_Main() {
+    //alert("Anonymous func");
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $(".main").css("text-align", "center");
+    } else {}
+    //if (document.location.origin !== "http://brenda-exotic-4500.codio.io" || document.location.origin !== "http://brenda-exotic-3000.codio.io") {
+    //  document.location = "https://brenda-exotic-4500.codio.io";
+    //}
+    firebaseRef.child("users/" + userName + "/apps/").on("value", function(b) {
+        getData(b);
         //App_AddApp(newApp.name, newApp.img, newApp.website);
         //firebaseRef.off("");
     });
@@ -216,23 +379,34 @@ function App_Main() {
         });
     });*/
     //App_AppAnimations();
-
-    $("#addApp").keydown(function (e) {
-        if (e.which == 13) {
+    $("#addApp").keydown(function(e) {
+        if(e.which == 13) {
             $("#addAppBTN").trigger("click");
         }
-        if (e.which == 27) {
+        if(e.which == 27) {
             $('#nameOfApp').val("");
             $('#imgUrlOfApp').val("");
             $('#websiteOfApp').val("");
             $('#addApp').modal('hide');
         }
     });
-    $("#addAppBTN").click(function () {
+    $("#addAppBTN").click(function() {
         //App_AddApp($('#nameOfApp').val(), $('#imgUrlOfApp').val(), $('#websiteOfApp').val());
         console.log("click func");
         //App_AddAppFromModal(1);
     });
-
+    if(window.location.hostname == "brenda-exotic.codio.io") {
+        vex.dialog.confirm({
+            message: 'You are using an old version of this website which does not support logging in. Redirect to the new page?',
+            callback: function(value) {
+                if(value) {
+                    location.href = "https://brenda-exotic-3000.codio.io/";
+                } else {
+                    $("#logInBtn").remove();
+                    $("#signUpBtn").remove();
+                }
+            }
+        });
+    }
 }
 $(App_Main);
