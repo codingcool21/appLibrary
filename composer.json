@@ -1,0 +1,7 @@
+{
+    "require": {
+        "firebase/php-jwt": "^2.2",
+        "ktamas77/firebase-php": "dev-master",
+        "namshi/jose": "^5.0"
+    }
+}

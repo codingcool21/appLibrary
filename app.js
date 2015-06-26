@@ -1,3 +1,4 @@
+var userName = "default";
 (function (d) {
     d.each(["backgroundColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "borderTopColor", "color", "outlineColor"], function (f, e) {
         d.fx.step[e] = function (g) {
@@ -136,6 +137,8 @@ function App_Bitly(longUrl, callback) {
             "format": "txt"
         },
         success: function (a) {
+            var b = a.split("http://");
+            a = "https://" + b[1];
             callback(a);
         }
     });
@@ -156,7 +159,7 @@ function App_AddApp(name, imglink, urllink) {
     o.img = imglink;
     o.website = urllink;
     //alert("imglink");
-    firebaseRef.child("apps/").push(o);
+    firebaseRef.child("users/" + userName).push(o);
 }
 
 function App_AddAppFromFirebase(name, imglink, urllink, appidentifier) {
@@ -188,8 +191,11 @@ function App_Generate15RandChar() {
 }
 
 function App_Main() {
+    //if (document.location.origin !== "http://brenda-exotic-4500.codio.io" || document.location.origin !== "http://brenda-exotic-3000.codio.io") {
+      //  document.location = "https://brenda-exotic-4500.codio.io";
+    //}
     firebaseRef = new Firebase("https://21-app-library.firebaseio.com/");
-    firebaseRef.child("apps/").on("value", function (a) {
+    firebaseRef.child("users/" + userName).on("value", function (a) {
         $(".app").remove();
         $("#loading").hide();
         var newApps = a.val();
