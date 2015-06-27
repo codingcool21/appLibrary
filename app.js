@@ -11,6 +11,30 @@ if(window.localStorage.getItem("userName") == null) {
     y = y.join("");
     var displayName = y;
 }
+var loggedIn = firebaseRef.getAuth();
+if (loggedIn == null) {
+    App_LogOut();
+}
+firebaseRef.onAuth(function(d) {
+    if(d == null) {
+        window.localStorage.removeItem("firebase:session::21-app-library");
+        window.localStorage.removeItem("firebase:host:21-app-library.firebaseio.com");
+        userName = "default";
+        vex.dialog.confirm({
+            message: "Your login session has expired. Login again",
+            callback: function(v) {
+                if (v) {
+                    App_LogInModal();
+                } else {
+                    
+                }
+            }
+        })
+        App_LogOut();
+    } else {
+        console.log(d);
+    }
+});
 (function(d) {
     d.each(["backgroundColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "borderTopColor", "color", "outlineColor"], function(f, e) {
         d.fx.step[e] = function(g) {
@@ -312,7 +336,12 @@ var getData = function(a) {
     $(".app").remove();
     $("#loading").hide();
     $("#loggedInBtnDiv").hide();
+    $("#search").hide();
+    $("#ifSearchNotAvailable").hide();
+    $("#signBtnGroup").hide();
     if(userName == "default") {
+        $("#ifSearchNotAvailable").show();
+        $("#signBtnGroup").show();
         $("#logInBtn").show();
         $("#signUpBtn").show();
         $("#examples").show();
@@ -332,17 +361,23 @@ var getData = function(a) {
         $("#signUpBtn").hide();
         $("#userNameField").text(displayName);
         $("#loggedInBtnDiv").show();
+        $("#search").show();
         newApps = a.val();
         //appListFromFirebase = newApps;
         //console.log(newApps);
+        savedApps = newApps;
         for(var app in newApps) {
             App_AddAppFromFirebase(newApps[app]["name"], newApps[app]["img"], newApps[app]["website"], app);
         }
         $(".main").append($("<div id='addAppCard' class='app'>").html("<div class='add'><button data-toggle='modal' data-target='#addApp' class='glyphicon glyphicon-plus'></button></div>"));
         $("#addAppCard").height($(".app").height());
+        $("#searchInput").keyup(function() {
+            App_SearchApps();
+        });
     }
 }
-var tt;
+
+var savedApps = {};
 
 function App_LogOut() {
     firebaseRef.off("value");
@@ -356,11 +391,38 @@ function App_LogOut() {
     //location.reload();
 }
 var newApps;
+/*function callSearchKeydown() {
+    $("#searchInput").keydown(App_SearchApps());
+}*/
+
+function App_SearchApps() {
+    //$("#searchInput").keydown(App_SearchApps());
+    //callSearchKeydown();
+    if($("#searchInput").val() == "") {
+        $(".app").show();
+        $("#addAppCard").show();
+    } else {
+        $(".app").hide();
+        $("#addAppCard").show();
+        for(var o in savedApps) {
+            if(savedApps[o]["name"].toLowerCase().indexOf($("#searchInput").val()) !== -1) {
+                $("[data-identifier=" + o + "]").show();
+                $("#addAppCard").show();
+            } else {
+                $("#addAppCard").show();
+            }
+        }
+    }
+}
 
 function App_Main() {
     //alert("Anonymous func");
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if(/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|BB10|Opera Mini/i.test(navigator.userAgent)) {
         $(".main").css("text-align", "center");
+        $(".taskbar").css("text-align", "center");
+        $("#examples").css("width", "100%");
+        $("#examples").css("text-align", "center");
+        $("#examples").css("margin-left", "0");
     } else {}
     //if (document.location.origin !== "http://brenda-exotic-4500.codio.io" || document.location.origin !== "http://brenda-exotic-3000.codio.io") {
     //  document.location = "https://brenda-exotic-4500.codio.io";
@@ -396,6 +458,12 @@ function App_Main() {
         //App_AddAppFromModal(1);
     });
     if(window.location.hostname == "brenda-exotic.codio.io") {
+        $("#logInBtn").remove();
+        $("#signUpBtn").remove();
+        App_LogIn = undefined;
+        App_LogOut = undefined;
+        App_LogInModal = undefined;
+        App_AddAppFromModal = undefined;
         vex.dialog.confirm({
             message: 'You are using an old version of this website which does not support logging in. Redirect to the new page?',
             callback: function(value) {
